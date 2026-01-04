@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InventoLite - Register</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
+        .glass { background: rgba(30, 41, 59, 0.6); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen">
+    <div class="w-full max-w-md">
+        <div class="glass rounded-3xl shadow-2xl p-10">
+            <h1 class="text-5xl font-bold text-center mb-4 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">InventoLite</h1>
+            <p class="text-center text-gray-400 mb-10 text-lg">Join thousands of smart shop owners</p>
+
+            <form id="registerForm" onsubmit="return registerUser()" class="space-y-6">
+                <input type="text" id="newUsername" placeholder="Choose username" class="w-full p-5 bg-gray-800/50 text-white rounded-xl focus:outline-none focus:ring-4 focus:ring-purple-500 transition" required>
+                <input type="password" id="newPassword" placeholder="Create password" class="w-full p-5 bg-gray-800/50 text-white rounded-xl focus:outline-none focus:ring-4 focus:ring-purple-500 transition" required>
+                <input type="password" id="confirmPassword" placeholder="Confirm password" class="w-full p-5 bg-gray-800/50 text-white rounded-xl focus:outline-none focus:ring-4 focus:ring-purple-500 transition" required>
+                <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-5 rounded-xl transition transform hover:scale-105">Create Account</button>
+            </form>
+
+            <p id="registerMessage" class="mt-6 text-center text-lg font-medium"></p>
+
+            <div class="mt-8 text-center">
+                <a href="index.html"><button class="text-blue-400 hover:text-blue-300 font-medium">← Back to Login</button></a>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
