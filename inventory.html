@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InventoLite Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0e17;
+            min-height: 100vh;
+        }
+
+        .glass {
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .neumorphic {
+            box-shadow: 8px 8px 16px #0a0e17, -8px -8px 16px #141a2a;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%);
+        }
+
+        .floating-add {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 40;
+        }
+
+        @media (max-width: 768px) {
+            .floating-add {
+                bottom: 1.5rem;
+                right: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body class="text-white gradient-bg">
+    <!-- Sidebar -->
+    <aside
+        class="fixed inset-y-0 left-0 w-72 glass neumorphic sidebar -translate-x-full md:translate-x-0 z-40 transition-transform">
+        <div class="p-8 text-center">
+            <h2 class="text-4xl font-black bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                InventoLite</h2>
+            <p class="text-gray-400 mt-2 text-sm">Pro Inventory Manager</p>
+        </div>
+        <nav class="mt-12 space-y-4 px-6">
+            <a href="#" class="block py-4 px-6 rounded-2xl bg-white/5 hover:bg-white/10 transition font-semibold">🏠
+                Dashboard</a>
+            <a href="#"
+                class="block py-4 px-6 rounded-2xl bg-gradient-to-r from-blue-600/20 to-cyan-600/20 transition font-bold">📦
+                Inventory</a>
+            <a href="#" class="block py-4 px-6 rounded-2xl hover:bg-white/10 transition font-semibold">📊 Analytics</a>
+        </nav>
+        <button onclick="logoutUser()"
+            class="absolute bottom-10 left-1/2 -translate-x-1/2 text-red-400 hover:text-red-300 font-medium flex items-center gap-3 bg-gray-800/50 px-8 py-4 rounded-2xl">
+            🚪 Logout
+        </button>
+    </aside>
+
+    <!-- Mobile Menu -->
+    <button onclick="document.querySelector('.sidebar').classList.toggle('-translate-x-full')"
+        class="fixed top-6 left-6 z-50 md:hidden text-4xl bg-gray-800/50 p-3 rounded-2xl">☰</button>
+
+    <!-- Main Content -->
+    <main class="md:ml-72 p-6 md:p-12">
+        <div class="text-center mb-12">
+            <p id="welcomeMessage"
+                class="text-4xl font-extrabold mb-4 bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">
+            </p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <div class="glass neumorphic rounded-3xl p-8 text-center">
+                <p class="text-gray-400 text-lg">Total Products</p>
+                <p id="totalCount" class="text-6xl font-black text-cyan-400 mt-4">0</p>
+            </div>
+            <div class="glass neumorphic rounded-3xl p-8 text-center">
+                <p class="text-gray-400 text-lg">Low Stock Items</p>
+                <p id="lowStockCount" class="text-6xl font-black text-yellow-400 mt-4">0</p>
+            </div>
+            <div class="glass neumorphic rounded-3xl p-8 text-center">
+                <p class="text-gray-400 text-lg">Critical Alerts</p>
+                <p id="criticalCount" class="text-6xl font-black text-red-400 mt-4">0</p>
+            </div>
+        </div>
+
+        <!-- Add Product -->
+        <div class="glass neumorphic rounded-3xl p-10 mb-12">
+            <h3
+                class="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                Add New Product</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <input type="text" id="productName" placeholder="Product Name"
+                    class="p-6 bg-gray-800/50 rounded-2xl focus:outline-none focus:ring-4 focus:ring-cyan-500 text-lg">
+                <input type="number" id="productQuantity" placeholder="Quantity" min="0"
+                    class="p-6 bg-gray-800/50 rounded-2xl focus:outline-none focus:ring-4 focus:ring-cyan-500 text-lg">
+                <button onclick="addItem()"
+                    class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 font-bold py-6 rounded-2xl text-xl transition transform hover:scale-105 shadow-2xl">+
+                    Add Product</button>
+            </div>
+        </div>
+
+        <!-- Search & AI -->
+        <div class="flex flex-col md:flex-row gap-6 mb-10">
+            <input type="text" id="searchInput" placeholder="🔍 Search products..."
+                class="flex-1 p-6 bg-gray-800/50 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-500 text-lg">
+            <button onclick="askAI()"
+                class="bg-gradient-to-r from-indigo-600/20 to-purple-600/20 hover:from-indigo-600/40 hover:to-purple-600/40 border border-indigo-500/30 font-bold px-8 py-4 rounded-xl text-lg transition flex items-center gap-3 mx-auto">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 14l9-5-9-5-9 5 9 5z" />
+                    <path
+                        d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998a12.078 12.078 0 01.665-6.479L12 14z" />
+                    <path d="M12 14l9-5-9-5-9 5 9 5z" />
+                </svg>
+                AI Reorder Tips
+            </button>
+        </div>
+
+        <!-- Table -->
+        <div class="glass neumorphic rounded-3xl overflow-hidden">
+            <table class="w-full">
+                <thead class="bg-gradient-to-r from-gray-800/50 to-gray-900/50">
+                    <tr>
+                        <th class="p-8 text-left text-xl font-bold">Product</th>
+                        <th class="p-8 text-center text-xl font-bold">Quantity</th>
+                        <th class="p-8 text-center text-xl font-bold">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="inventoryTable" class="divide-y divide-gray-700"></tbody>
+            </table>
+            <div id="emptyMessage" class="text-center py-32 text-3xl text-gray-500 font-light">No products yet.<br><span
+                    class="text-lg">Start adding above to build your inventory!</span></div>
+        </div>
+
+        <!-- Export -->
+        <div class="text-center mt-12">
+            <button onclick="exportCSV()"
+                class="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 font-bold px-12 py-6 rounded-2xl text-2xl transition transform hover:scale-105 shadow-2xl">
+                📄 Export Inventory
+            </button>
+        </div>
+    </main>
+
+    <!-- Floating Add Button (Mobile) -->
+    <button onclick="document.getElementById('productName').focus()"
+        class="floating-add md:hidden bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-4xl w-16 h-16 rounded-full shadow-2xl flex items-center justify-center transition transform hover:scale-110">+</button>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
